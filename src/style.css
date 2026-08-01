@@ -1,0 +1,392 @@
+/* ---------- always-on chrome (skip link, controls, HUD, focus) ---------- */
+/* Deliberately unscoped: this is meta-UI, not "site content", so it must
+   stay usable even while the page itself is in raw/uncompiled state. */
+
+:root {
+  --bg: #f5f5f3;
+  --ink: #111111;
+  --muted: #6b6b68;
+  --accent: #3b82f6;
+  --accent-ink: #1d4ed8;
+  --line: rgba(17, 17, 17, 0.14);
+  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: fixed;
+  top: -3rem;
+  left: 1rem;
+  z-index: 10000;
+  background: var(--ink);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  font: 600 13px var(--mono);
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+.controls {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 9998;
+  display: flex;
+  gap: 0.5rem;
+  font: 600 12px var(--mono);
+}
+.controls button {
+  background: var(--ink);
+  color: #fff;
+  border: 1px solid var(--ink);
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.controls button:hover {
+  background: var(--accent-ink);
+  border-color: var(--accent-ink);
+}
+.controls button[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.hud {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font: 11px var(--mono);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--line);
+  pointer-events: none;
+}
+
+.inspect-box {
+  position: fixed;
+  border: 1.5px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  pointer-events: none;
+  z-index: 9999;
+}
+.inspect-box__label {
+  position: absolute;
+  top: -1.4rem;
+  left: 0;
+  font: 600 10px var(--mono);
+  background: var(--accent-ink);
+  color: #fff;
+  padding: 0.15rem 0.4rem;
+  white-space: nowrap;
+  max-width: 60vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.show-grid::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+      to right,
+      color-mix(in srgb, var(--accent) 35%, transparent) 0 1px,
+      transparent 1px 8px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--accent) 35%, transparent) 0 1px,
+      transparent 1px 8px
+    );
+}
+
+/* ---------- compiled state: the real design ---------- */
+
+html[data-inspect='on'] body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.5;
+}
+
+html[data-inspect='on'] * {
+  box-sizing: border-box;
+}
+
+html[data-inspect='on'] header[data-component='Nav'] {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem clamp(1.25rem, 4vw, 3rem);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+html[data-inspect='on'] .nav__brand {
+  font: 600 14px var(--mono);
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+html[data-inspect='on'] header nav {
+  display: flex;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+html[data-inspect='on'] header nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font: 500 13px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+html[data-inspect='on'] header nav a:hover {
+  color: var(--accent-ink);
+}
+
+html[data-inspect='on'] main {
+  max-width: 74rem;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 4vw, 3rem);
+}
+
+html[data-inspect='on'] section {
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+html[data-inspect='on'] #hero {
+  padding-top: clamp(3.5rem, 10vw, 7rem);
+  border-bottom: 1px solid var(--line);
+}
+html[data-inspect='on'] .hero__note {
+  font: 500 12px var(--mono);
+  color: var(--muted);
+  margin: 0 0 2rem;
+}
+html[data-inspect='on'] .hero__note kbd {
+  background: var(--ink);
+  color: #fff;
+  padding: 0.1rem 0.4rem;
+  border-radius: 2px;
+  font: 600 11px var(--mono);
+}
+html[data-inspect='on'] .hero__name {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+}
+@supports (font-size: 8vw) {
+  html[data-inspect='on'] .hero__name {
+    /* progressive enhancement: Chrome 150 text-fit, digest 2026-07-12 */
+    font-size: 5.5rem;
+    text-fit: max;
+  }
+}
+html[data-inspect='on'] .hero__role {
+  font: 600 14px var(--mono);
+  color: var(--accent-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 1.5rem;
+}
+html[data-inspect='on'] .hero__pitch {
+  max-width: 42rem;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  color: var(--ink);
+  margin: 0 0 2rem;
+}
+html[data-inspect='on'] .hero__cta {
+  display: inline-block;
+  color: var(--accent-ink);
+  font: 600 14px var(--mono);
+  text-decoration: none;
+  border-bottom: 1.5px solid var(--accent-ink);
+  padding-bottom: 0.2rem;
+}
+
+html[data-inspect='on'] h2 {
+  font: 700 clamp(1.5rem, 3vw, 2rem) var(--sans);
+  margin: 0 0 2rem;
+}
+
+html[data-inspect='on'] .project-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+@supports (flex-wrap: balance) {
+  html[data-inspect='on'] .project-grid {
+    /* progressive enhancement: Edge 150, digest 2026-07-12 */
+    flex-wrap: balance;
+  }
+}
+html[data-inspect='on'] .project-card {
+  flex: 1 1 16rem;
+  min-width: 16rem;
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  background: #fff;
+  position: relative;
+}
+html[data-inspect='on'] .project-card:hover {
+  border-color: var(--accent);
+}
+@supports (background-clip: border-area) {
+  html[data-inspect='on'] .project-card {
+    /* progressive enhancement: Chrome 150 gradient border, digest 2026-07-12 */
+    border: 1px solid transparent;
+    background:
+      linear-gradient(#fff, #fff) padding-box,
+      linear-gradient(135deg, var(--line), var(--line)) border-area;
+  }
+  html[data-inspect='on'] .project-card:hover {
+    background:
+      linear-gradient(#fff, #fff) padding-box,
+      linear-gradient(135deg, var(--accent), var(--accent-ink)) border-area;
+  }
+}
+html[data-inspect='on'] .project-card--placeholder {
+  border-style: dashed;
+  color: var(--muted);
+}
+html[data-inspect='on'] .project-card__year {
+  font: 600 11px var(--mono);
+  color: var(--muted);
+}
+html[data-inspect='on'] .project-card__title {
+  font: 700 1.15rem var(--sans);
+  margin: 0.5rem 0;
+}
+html[data-inspect='on'] .project-card__blurb {
+  font-size: 0.92rem;
+  color: var(--ink);
+  margin: 0 0 1rem;
+}
+html[data-inspect='on'] .project-card__stack {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+}
+html[data-inspect='on'] .project-card__stack li {
+  font: 500 11px var(--mono);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 0.2rem 0.5rem;
+}
+
+html[data-inspect='on'] .source-map__note {
+  max-width: 40rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+html[data-inspect='on'] .source-map__note code {
+  font: 500 0.85em var(--mono);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 0.05rem 0.35rem;
+}
+html[data-inspect='on'] #skill-canvas {
+  width: 100%;
+  height: 26rem;
+  max-height: 60vh;
+  touch-action: none;
+  cursor: grab;
+}
+
+html[data-inspect='on'] .deploy-form {
+  display: grid;
+  gap: 1rem;
+  max-width: 30rem;
+}
+html[data-inspect='on'] .deploy-form label {
+  display: grid;
+  gap: 0.35rem;
+  font: 600 12px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+html[data-inspect='on'] .deploy-form input,
+html[data-inspect='on'] .deploy-form textarea {
+  font: 400 15px var(--sans);
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 0.6rem 0.7rem;
+}
+html[data-inspect='on'] .deploy-form textarea {
+  resize: vertical;
+}
+html[data-inspect='on'] .deploy-form button {
+  justify-self: start;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.4rem;
+  font: 600 13px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+html[data-inspect='on'] .deploy-form button:hover {
+  background: var(--accent-ink);
+}
+html[data-inspect='on'] .deploy-form button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+html[data-inspect='on'] .deploy-status {
+  font: 500 13px var(--mono);
+  color: var(--muted);
+  min-height: 1.2em;
+}
+html[data-inspect='on'] .deploy-status__live {
+  color: #16a34a;
+  font-weight: 700;
+}
+html[data-inspect='on'] .deploy-status a {
+  color: var(--accent-ink);
+}
+
+html[data-inspect='on'] footer {
+  padding: 2rem clamp(1.25rem, 4vw, 3rem) 6rem;
+  color: var(--muted);
+  font: 500 12px var(--mono);
+  text-align: center;
+}
+html[data-inspect='on'] footer code {
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-inspect='on'] .hero__cta,
+  html[data-inspect='on'] .project-card,
+  .controls button {
+    transition: none;
+  }
+}

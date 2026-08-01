@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en" data-inspect="off">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inspect Mode — Creative Frontend Engineer</title>
+    <meta
+      name="description"
+      content="A portfolio that proves itself: the page loads as raw, unstyled HTML, and compiles into its real design in front of you."
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header data-component="Nav" data-props='{"variant":"primary"}'>
+      <a class="nav__brand" href="#hero">◆ NAME HERE</a>
+      <nav aria-label="Primary">
+        <a href="#work">Work</a>
+        <a href="#source-map">Source Map</a>
+        <a href="#deploy">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section id="hero" data-component="Hero" data-props='{"role":"Creative Frontend Engineer"}'>
+        <p class="hero__note">
+          this is what browsers see first. press <kbd>`</kbd> or the
+          <strong>Inspect</strong> button to compile it.
+        </p>
+        <h1 class="hero__name flip-target">NAME HERE</h1>
+        <p class="hero__role flip-target">Creative Frontend Engineer</p>
+        <p class="hero__pitch flip-target">
+          I build interfaces that perform — WebGPU shaders, physics-driven
+          interaction, motion systems that ship. This page is the proof:
+          toggle Inspect and watch it compile from raw markup into the real
+          thing, live, with real numbers.
+        </p>
+        <a class="hero__cta flip-target" href="#work">View work ↓</a>
+      </section>
+
+      <section id="work" aria-labelledby="work-heading">
+        <h2 id="work-heading" class="flip-target">Work</h2>
+        <div class="project-grid">
+          <article
+            class="project-card flip-target"
+            data-component="ProjectCard"
+            data-props='{"title":"ONE BIT FROM HOME","stack":["Three.js","WebGPU","TSL","GSAP"],"year":"2026"}'
+          >
+            <span class="project-card__year">2026</span>
+            <h3 class="project-card__title">ONE BIT FROM HOME</h3>
+            <p class="project-card__blurb">
+              Interactive storytelling site — a fictional deep-space probe's
+              transmission log, told through a single "signal" variable that
+              drives dither, dropout and reveal in real time.
+            </p>
+            <ul class="project-card__stack">
+              <li>Three.js</li>
+              <li>WebGPU</li>
+              <li>TSL</li>
+              <li>GSAP</li>
+            </ul>
+          </article>
+
+          <article
+            class="project-card project-card--placeholder flip-target"
+            data-component="ProjectCard"
+            data-props='{"title":"PLACEHOLDER PROJECT","stack":["your stack here"],"year":"—"}'
+          >
+            <span class="project-card__year">—</span>
+            <h3 class="project-card__title">Placeholder Project</h3>
+            <p class="project-card__blurb">
+              Swap this card for a real case study — what you built, the
+              constraint you were solving, and the one decision you'd defend
+              in an interview.
+            </p>
+            <ul class="project-card__stack">
+              <li>your stack here</li>
+            </ul>
+          </article>
+
+          <article
+            class="project-card project-card--placeholder flip-target"
+            data-component="ProjectCard"
+            data-props='{"title":"PLACEHOLDER PROJECT","stack":["your stack here"],"year":"—"}'
+          >
+            <span class="project-card__year">—</span>
+            <h3 class="project-card__title">Placeholder Project</h3>
+            <p class="project-card__blurb">
+              A second slot. Hover any card in compiled mode to see its real
+              component name and props — not a screenshot, the actual DOM.
+            </p>
+            <ul class="project-card__stack">
+              <li>your stack here</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="source-map" aria-labelledby="source-map-heading">
+        <h2 id="source-map-heading" class="flip-target">Source Map</h2>
+        <p class="source-map__note flip-target">
+          Drag the nodes. Distance from the hub is a hand-picked signal, not a
+          benchmark — edit <code>src/skillGraph.js</code> with your own
+          numbers before this goes live.
+        </p>
+        <canvas
+          id="skill-canvas"
+          class="flip-target"
+          role="img"
+          aria-label="Skill graph: six skill nodes orbiting a central Frontend Engineer hub, sized by self-rated proficiency. Drag any node to move it."
+        ></canvas>
+      </section>
+
+      <section id="deploy" aria-labelledby="deploy-heading">
+        <h2 id="deploy-heading" class="flip-target">Deploy</h2>
+        <form
+          id="deploy-form"
+          class="deploy-form flip-target"
+          data-component="ContactForm"
+          novalidate
+        >
+          <label
+            >Name
+            <input type="text" name="name" autocomplete="name" required />
+          </label>
+          <label
+            >Email
+            <input type="email" name="email" autocomplete="email" required />
+          </label>
+          <label
+            >Message
+            <textarea name="message" rows="4" required></textarea>
+          </label>
+          <button type="submit">deploy_message()</button>
+        </form>
+        <p class="deploy-status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <footer class="flip-target">
+      <p>
+        // built with Vite, GSAP Flip, and an unreasonable amount of respect
+        for <code>view-source:</code>
+      </p>
+    </footer>
+
+    <div class="hud" aria-live="polite">
+      <span data-hud="components">— components</span>
+      <span data-hud="compile">— ms compile</span>
+      <span data-hud="fps">— fps</span>
+    </div>
+
+    <div class="controls">
+      <button
+        type="button"
+        data-inspect-trigger
+        aria-pressed="false"
+        title="Toggle Inspect (`)"
+      >
+        Inspect
+      </button>
+      <button type="button" data-grid-trigger aria-pressed="false" title="Toggle 8px grid">
+        Grid
+      </button>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
